@@ -16,17 +16,28 @@ options.add_argument("user-data-dir=C:/Users/gig9/AppData/Local/Google/Chrome/Us
 browser = webdriver.Chrome(options = options)
 
 listaContatos = open('./listacontato.txt', 'r')
-texto = urllib.parse.quote("Ignore this message. It's just a test. Sorry for the inconvenience.")
+texto = urllib.parse.quote("Ignore this message. \n It's just a test. Sorry for the inconvenience.")
+
+
 
 for contato in listaContatos.readlines():
+    findElement = False
+    
     browser.get(f"https://web.whatsapp.com/send?phone={contato}&text={texto}")
     
-    while (not isElementPresent("xpath", '//*[@id="main"]/footer/div[1]/div/span[2]/div/div[2]/div[2]/button/span')):
+    while (findElement == False):
+        if (isElementPresent("xpath", '//*[@id="main"]/footer/div[1]/div/span[2]/div/div[2]/div[2]/button/span')):
+            browser.find_element("xpath", '//*[@id="main"]/footer/div[1]/div/span[2]/div/div[2]/div[2]/button/span').click()
+            findElement = True
+        
+        if (isElementPresent("xpath", '//*[@id="app"]/div/span[2]/div/span/div/div/div/div/div/div[2]/div')):
+            findElement = True
+        
+        
         sleep(0.2)
 
-    browser.find_element("xpath", '//*[@id="main"]/footer/div[1]/div/span[2]/div/div[2]/div[2]/button/span').click()
-    sleep(0.2)
+    
 
+    sleep(0.5)
 
-
-#https://web.whatsapp.com/send?phone=553597492165&text=oi
+exit()
